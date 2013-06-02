@@ -1,0 +1,65 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+ext {
+    javaVersion = '1.6'
+    springVersion = '3.2.2.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    compile "org.springframework:spring-context:${springVersion}"
+    compile "org.springframework:spring-jdbc:${springVersion}"
+    compile 'mysql:mysql-connector-java:5.1.25'
+    compile 'commons-dbcp:commons-dbcp:1.4'
+}
+
+task compile(dependsOn: [compileJava, compileTestJava]) {
+    description = 'compile main/test java classes'
+    group = 'build'
+}
+
+task baseDirs << {
+  sourceSets.each { set ->
+    set.java.srcDirs.each { dir ->
+      if (!dir.exists()) dir.mkdirs()
+    }
+    set.resources.srcDirs.each { dir ->
+      if (!dir.exists()) dir.mkdirs()
+    }
+  }
+ 
+  if (!buildDir.exists()) buildDir.mkdirs()
+}
+
+tasks.eclipse.dependsOn cleanEclipse
+tasks.eclipse.dependsOn baseDirs
+
+eclipse {
+    classpath {
+        downloadSources = true
+        defaultOutputDir = file("${buildDir}/classes/main")
+    }
+}
+
+task writeService(type: JavaExec) {
+    main = 'mysql.replication.transactional.WriteServiceCaller'
+    classpath = sourceSets.main.runtimeClasspath
+
+    if (project.hasProperty('product')) {
+        String [] productInfos = product.split(',')
+        args productInfos[0], productInfos[1], productInfos[2]
+    }
+}
+
+task readService(type: JavaExec) {
+    main = 'mysql.replication.transactional.ReadServiceCaller'
+    classpath = sourceSets.main.runtimeClasspath
+}
