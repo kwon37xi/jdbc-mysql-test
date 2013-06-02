@@ -27,7 +27,7 @@ general_log_file        = /var/log/mysql/mysql.log
 general_log             = 1
 ```
 
-==== mysqlreplicationdriver.groovy ====
+# mysqlreplicationdriver.groovy
 ```sh
 # setReadOnly(true)로 요청보내기 테스트
 groovy mysqlreplicationdriver.groovy true
@@ -36,7 +36,7 @@ groovy mysqlreplicationdriver.groovy true
 groovy mysqlreplicationdriver.groovy false
 ```
 
-==== Spring @Transactional 테스트 ====
+# Spring @Transactional 테스트
 ```
 # Transactional(readOnly=true) 테스트
 gradle readService
