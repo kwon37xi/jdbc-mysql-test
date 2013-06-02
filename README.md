@@ -7,7 +7,7 @@ MySQL JDBC Replication Driver는 Connection.setReadOnly(true/false) 값에 따�
 false이면 Master로 요청을 보낸다.
 ```
 # Replication MySQL JDBC Driver URL
-jdbc:mysql:replication://MasterDB:3306,SlaveDB:3306/test?useUnicode=true&amp;useServerPrepStmts=true&amp;characterEncoding=utf8
+jdbc:mysql:replication://MasterDB:3306,SlaveDB:3306/test?useUnicode=true&useServerPrepStmts=true&characterEncoding=utf8
 ```
 
 이 코드는 test라는 DB에 products라는 테이블이 있다고 간주하고서 setReadOnly에 따라 정말로 Master와 Slave를 나눠서
